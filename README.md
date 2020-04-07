@@ -1,6 +1,6 @@
 # news-collection-api
-Бэкенд диплома на Яндекс.Практикуме.
-Ссылка на API: https://api.newscollection.gq.
+Бэкенд диплома на Яндекс.Практикуме.  
+Ссылка на API: https://api.newscollection.gq.  
 Запуск проекта:
 * npm run dev - в режиме разработки с хот-релоудом;
 * npm run start - в продакшн-режиме, без хот-релоуда.
