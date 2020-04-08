@@ -36,7 +36,7 @@ app.get('/crash-test', () => { // убрать по готовности!!!
     throw new Error('Сервер сейчас упадет');
   }, 0);
 });
-app.use(router);
+app.use('/', router);
 app.use((req, res, next) => {
   next(new NotFoundError('Запрашиваемый ресурс не найден'));
 });
