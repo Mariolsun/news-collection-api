@@ -5,10 +5,11 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate'); // это нужно здесь?
 const { PORT, BASE_PATH, DATABASE_URL } = require('./config'); // здесь мб process.env?
-const router = require('./routes/index');
+const routes = require('./routes/index');
 const corsHeaders = require('./middlewares/corsHeaders'); // нужно это?
 const NotFoundError = require('./errors/not-found-err');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const errorController = require('./controllers/errorController');
 
 const app = express();
 mongoose.connect(DATABASE_URL, { // разобраться с настройками mongoose
@@ -36,24 +37,17 @@ app.get('/crash-test', () => { // убрать по готовности!!!
     throw new Error('Сервер сейчас упадет');
   }, 0);
 });
-app.use('/', router);
+app.use('/', routes);
 app.use((req, res, next) => {
+  console.log(`throwing not found error`);
   next(new NotFoundError('Запрашиваемый ресурс не найден'));
 });
 
-app.use(errorLogger);
 app.use(errors());
+app.use(errorLogger);
 
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  console.log(`error controller. status: ${err.message}`);
-  res
-    .status(statusCode)
-    .send({
-      message,
-    });
-});
+app.use(errorController);
+
 
 app.listen(PORT, () => {
   console.log('Ссылка на сервер:');
