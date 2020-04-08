@@ -10,3 +10,5 @@ router.use('/signup', signup);
 router.use(auth);
 router.use('/users', users);
 router.use('/articles', articles);
+
+module.expors = router;

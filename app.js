@@ -4,31 +4,25 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
-const { errors } = require('celebrate');
-const { PORT, BASE_PATH, DATABASE_URL } = require('./config');
-const users = require('./routes/users');
-const cards = require('./routes/cards');
-const signin = require('./routes/signin');
-const signup = require('./routes/signup');
-const pageLoad = require('./routes/pageLoad');
-
-const auth = require('./middlewares/auth');
-const corsHeaders = require('./middlewares/corsHeaders');
+const { errors } = require('celebrate'); // это нужно здесь?
+const { PORT, BASE_PATH, DATABASE_URL } = require('./config'); // здесь мб process.env?
+const router = require('./routes/index');
+const corsHeaders = require('./middlewares/corsHeaders'); // нужно это?
 const NotFoundError = require('./errors/not-found-err');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
-mongoose.connect(DATABASE_URL, {
+mongoose.connect(DATABASE_URL, { // разобраться с настройками mongoose
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
   useUnifiedTopology: true,
 })
   .then(() => {
-    console.log('successful connection!');
+    console.log('successful connection!'); // это нужно? мб как-то в логгер?
   })
   .catch((err) => {
-    console.log(`error connecting to mongodb: ${err.message}`);
+    console.log(`error connecting to mongodb: ${err.message}`); // а это?
   });
 
 app.use(bodyParser.json());
@@ -38,17 +32,12 @@ app.use(cookieParser());
 app.use(requestLogger);
 app.use(corsHeaders);
 
-app.get('/crash-test', () => {
+app.get('/crash-test', () => { // убрать по готовности!!!
   setTimeout(() => {
     throw new Error('Сервер сейчас упадет');
   }, 0);
 });
-app.use('/signin', signin);
-app.use('/signup', signup);
-app.use('/cards', cards);
-app.use('/pageload', pageLoad);
-app.use(auth);
-app.use('/users', users);
+app.use(router);
 app.use((req, res, next) => {
   next(new NotFoundError('Запрашиваемый ресурс не найден'));
 });
