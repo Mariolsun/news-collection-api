@@ -7,7 +7,7 @@ const auth = require('../middlewares/auth');
 
 router.use('/signin', signin);
 router.use('/signup', signup);
-router.use(auth);
+// router.use(auth);
 router.use('/users', users);
 router.use('/articles', articles);
 
