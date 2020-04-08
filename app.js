@@ -1,4 +1,3 @@
-//Копипаста с mesto!!!
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -29,8 +28,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(cookieParser());
+app.use(corsHeaders); // Разобраться. мб есть специальный пакет? мб спросить в слаке
 app.use(requestLogger);
-app.use(corsHeaders);
 
 app.get('/crash-test', () => { // убрать по готовности!!!
   setTimeout(() => {
