@@ -25,3 +25,10 @@ module.exports.isValidArticleId = celebrate({
     id: Joi.string().alphanum().length(24),
   }),
 });
+
+module.exports.isValidSignin = celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+  }),
+});
