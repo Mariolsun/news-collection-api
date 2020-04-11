@@ -38,10 +38,6 @@ app.get('/crash-test', () => { // убрать по готовности!!!
   }, 0);
 });
 app.use('/', routes);
-app.use((req, res, next) => {
-  console.log(`throwing not found error`);
-  next(new NotFoundError('Запрашиваемый ресурс не найден'));
-});
 
 app.use(errors());
 app.use(errorLogger);
