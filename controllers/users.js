@@ -7,7 +7,7 @@ module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) throw new NotFoundError('Пользователь не найден');
-      res.send({ data: { email: user.email, name: user.name } });
+      res.send({ data: { user } });
     })
     .catch(next);
 };
@@ -29,7 +29,7 @@ module.exports.createUser = (req, res, next) => {
       });
     })
     .then((user) => {
-      res.status(201).send({ _id: user._id, email: user.email }); // чекнуть, нужен ли тут емейл
+      res.status(201).send({ data: { user } }); // чекнуть, что тут нужно из данных возвр.
     })
     .catch(next);
 };
