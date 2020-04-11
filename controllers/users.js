@@ -29,7 +29,7 @@ module.exports.createUser = (req, res, next) => {
       });
     })
     .then((user) => {
-      res.status(201).send({ data: { user } }); // чекнуть, что тут нужно из данных возвр.
+      res.status(201).send({ data: { user: { id: user._id, name: user.name, email: user.email } } }); // чекнуть, что тут нужно из данных возвр.
     })
     .catch(next);
 };
