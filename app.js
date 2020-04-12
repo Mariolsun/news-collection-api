@@ -3,8 +3,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
-const { errors } = require('celebrate'); // это нужно здесь?
-const { PORT, DATABASE_URL } = require('./config'); // здесь мб process.env?
+const { errors } = require('celebrate');
+const { PORT, DATABASE_URL } = require('./config');
+const limiter = require('./middlewares/limiter');
 const routes = require('./routes/index');
 const corsHeaders = require('./middlewares/corsHeaders'); // нужно это?
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -17,15 +18,15 @@ mongoose.connect(DATABASE_URL, { // разобраться с настройка
   useUnifiedTopology: true,
 })
   .then(() => {
-    console.log('all ok');
     const app = express();
+    app.use(limiter); // проверить, что с разных ip лимит отдельный!
+    //  мб нужен app.set('trust proxy', 1);
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(helmet());
     app.use(cookieParser());
     app.use(corsHeaders);
     app.use(requestLogger);
-
     app.use('/', routes);
 
     app.use(errors());
@@ -37,6 +38,5 @@ mongoose.connect(DATABASE_URL, { // разобраться с настройка
     app.listen(PORT);
   })
   .catch((err) => {
-    console.log(`error!`);
-    errorLogger.error(err);
+    console.log(`could not connect to mongodb. Error: ${err}`);
   });
