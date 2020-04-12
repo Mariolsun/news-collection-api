@@ -10,7 +10,6 @@ const corsHeaders = require('./middlewares/corsHeaders'); // нужно это?
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorController = require('./controllers/errorController');
 
-const app = express();
 mongoose.connect(DATABASE_URL, { // разобраться с настройками mongoose
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -18,25 +17,26 @@ mongoose.connect(DATABASE_URL, { // разобраться с настройка
   useUnifiedTopology: true,
 })
   .then(() => {
-    console.log('successful connection to mongodb!'); // это нужно? мб как-то в логгер?
+    console.log('all ok');
+    const app = express();
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(helmet());
+    app.use(cookieParser());
+    app.use(corsHeaders);
+    app.use(requestLogger);
+
+    app.use('/', routes);
+
+    app.use(errors());
+    app.use(errorLogger);
+
+    app.use(errorController);
+
+
+    app.listen(PORT);
   })
   .catch((err) => {
-    console.log(`error connecting to mongodb: ${err.message}`); // а это?
+    console.log(`error!`);
+    errorLogger.error(err);
   });
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(helmet());
-app.use(cookieParser());
-app.use(corsHeaders); // Разобраться. мб есть специальный пакет? мб спросить в слаке
-app.use(requestLogger);
-
-app.use('/', routes);
-
-app.use(errors());
-app.use(errorLogger);
-
-app.use(errorController);
-
-
-app.listen(PORT);
