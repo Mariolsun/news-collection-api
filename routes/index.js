@@ -14,7 +14,6 @@ router.use(auth);
 router.use('/users', users);
 router.use('/articles', articles);
 router.use((req, res, next) => {
-  console.log(`throwing not found error in router`);
   next(new NotFoundError('Запрашиваемый ресурс не найден'));
 });
 

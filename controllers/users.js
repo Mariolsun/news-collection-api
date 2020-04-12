@@ -6,8 +6,9 @@ const ConflictError = require('../errors/conflict-err');
 module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
+      const { email, name } = user;
       if (!user) throw new NotFoundError('Пользователь не найден');
-      res.send({ data: { user } });
+      res.send({ data: { email, name } });
     })
     .catch(next);
 };
@@ -29,7 +30,7 @@ module.exports.createUser = (req, res, next) => {
       });
     })
     .then((user) => {
-      res.status(201).send({ data: { user: { id: user._id, name: user.name, email: user.email } } }); // чекнуть, что тут нужно из данных возвр.
+      res.status(201).send({ data: { email: user.email, name: user.name } }); // чекнуть, что нужно
     })
     .catch(next);
 };
