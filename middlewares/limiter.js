@@ -5,7 +5,7 @@ const limiter = rateLimit({
   windowMs: 60 * 1000,
   max: 2,
   handler: (req, res, next) => {
-    next(new TooManyRequestsError(`Too many requests - your IP ${req.ip} is being rate limited`));
+    next(new TooManyRequestsError(`Too many requests - your IP ${req.connection.remoteAddress} is being rate limited`));
   },
 });
 

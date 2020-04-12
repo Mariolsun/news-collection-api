@@ -19,7 +19,7 @@ mongoose.connect(DATABASE_URL, { // разобраться с настройка
 })
   .then(() => {
     const app = express();
-    app.set('trust proxy', 1);
+    // app.set('trust proxy', 1);
     app.use(limiter);
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
