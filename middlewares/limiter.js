@@ -3,9 +3,9 @@ const TooManyRequestsError = require('../errors/too-many-requests-err');
 
 const limiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 1,
+  max: 2,
   handler: (req, res, next) => {
-    next(new TooManyRequestsError('Too many requests - your IP is being rate limited'));
+    next(new TooManyRequestsError(`Too many requests - your IP ${req.ip} is being rate limited`));
   },
 });
 
