@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate'); // это нужно здесь?
-const { PORT, BASE_PATH, DATABASE_URL } = require('./config'); // здесь мб process.env?
+const { PORT, DATABASE_URL } = require('./config'); // здесь мб process.env?
 const routes = require('./routes/index');
 const corsHeaders = require('./middlewares/corsHeaders'); // нужно это?
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -18,7 +18,7 @@ mongoose.connect(DATABASE_URL, { // разобраться с настройка
   useUnifiedTopology: true,
 })
   .then(() => {
-    console.log('successful connection!'); // это нужно? мб как-то в логгер?
+    console.log('successful connection to mongodb!'); // это нужно? мб как-то в логгер?
   })
   .catch((err) => {
     console.log(`error connecting to mongodb: ${err.message}`); // а это?
@@ -39,7 +39,4 @@ app.use(errorLogger);
 app.use(errorController);
 
 
-app.listen(PORT, () => {
-  console.log('Ссылка на сервер:');
-  console.log(BASE_PATH);
-});
+app.listen(PORT);
