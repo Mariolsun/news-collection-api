@@ -7,7 +7,6 @@ const { errors } = require('celebrate'); // это нужно здесь?
 const { PORT, BASE_PATH, DATABASE_URL } = require('./config'); // здесь мб process.env?
 const routes = require('./routes/index');
 const corsHeaders = require('./middlewares/corsHeaders'); // нужно это?
-const NotFoundError = require('./errors/not-found-err');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorController = require('./controllers/errorController');
 
@@ -32,11 +31,6 @@ app.use(cookieParser());
 app.use(corsHeaders); // Разобраться. мб есть специальный пакет? мб спросить в слаке
 app.use(requestLogger);
 
-app.get('/crash-test', () => { // убрать по готовности!!!
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадет');
-  }, 0);
-});
 app.use('/', routes);
 
 app.use(errors());
