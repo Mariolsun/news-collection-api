@@ -19,6 +19,7 @@ mongoose.connect(DATABASE_URL, { // разобраться с настройка
 })
   .then(() => {
     const app = express();
+    app.set('trust proxy', 1);
     app.use(limiter); // проверить, что с разных ip лимит отдельный!
     //  мб нужен app.set('trust proxy', 1);
     app.use(bodyParser.json());
