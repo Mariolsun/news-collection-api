@@ -5,7 +5,7 @@ const signin = require('./signin/signin');
 const articles = require('./articles/articles');
 const auth = require('../middlewares/auth');
 const NotFoundError = require('../errors/not-found-err');
-const { ERRORS } = require('../constants/errors');
+const errorTexts = require('../constants/errors');
 
 router.use('/signup', signup);
 router.use('/signin', signin);
@@ -15,7 +15,7 @@ router.use(auth);
 router.use('/users', users);
 router.use('/articles', articles);
 router.use((req, res, next) => {
-  next(new NotFoundError(ERRORS.NOT_FOUND_DEFAULT));
+  next(new NotFoundError(errorTexts.NOT_FOUND_DEFAULT));
 });
 
 module.exports = router;

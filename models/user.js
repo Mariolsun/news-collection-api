@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const NeedAuthError = require('../errors/need-auth-err');
-const { ERRORS } = require('../constants/errors');
+const errorTexts = require('../constants/errors');
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     dropDups: true,
     validate: {
       validator: validator.isEmail,
-      message: (props) => `${props.value} ${ERRORS.VALID_NOT_EMAIL}`,
+      message: (props) => `${props.value} ${errorTexts.VALID_NOT_EMAIL}`,
     },
   },
   password: {
@@ -33,12 +33,12 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(email,
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new NeedAuthError(ERRORS.AUTH_WRONG_CREDENTIALS));
+        return Promise.reject(new NeedAuthError(errorTexts.AUTH_WRONG_CREDENTIALS));
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new NeedAuthError(ERRORS.AUTH_WRONG_CREDENTIALS));
+            return Promise.reject(new NeedAuthError(errorTexts.AUTH_WRONG_CREDENTIALS));
           }
           return user;
         });

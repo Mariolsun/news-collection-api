@@ -2,13 +2,13 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
 const ConflictError = require('../errors/conflict-err');
-const { ERRORS } = require('../constants/errors');
+const errorTexts = require('../constants/errors');
 
 module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       const { email, name } = user;
-      if (!user) throw new NotFoundError(ERRORS.USER_NOT_FOUND);
+      if (!user) throw new NotFoundError(errorTexts.USER_NOT_FOUND);
       res.send({ data: { email, name } });
     })
     .catch(next);
@@ -18,7 +18,7 @@ module.exports.createUser = (req, res, next) => {
   const { email } = req.body;
   User.exists({ email })
     .then((exists) => {
-      if (exists) throw new ConflictError(ERRORS.USER_ALREADY_EXISTS);
+      if (exists) throw new ConflictError(errorTexts.USER_ALREADY_EXISTS);
     })
     .then(() => {
       const { password } = req.body;

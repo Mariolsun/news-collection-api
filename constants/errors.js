@@ -1,4 +1,4 @@
-module.exports.ERRORS = {
+module.exports = {
   ARTICLE_NOT_FOUND: 'Такой карточки нет в базе',
   ARTICLE_NOT_DELETED_NOT_OWNER: 'Статью может удалить только ее создатель!',
   USER_NOT_FOUND: 'Пользователь не найден',
@@ -9,4 +9,5 @@ module.exports.ERRORS = {
   NOT_FOUND_DEFAULT: 'Запрашиваемый ресурс не найден',
   AUTH_NEEDED: 'Необходима авторизация',
   AUTH_WRONG_CREDENTIALS: 'Неправильные почта или пароль',
+  INTERNAL_ERROR: 'На сервере произошла ошибка',
 };
