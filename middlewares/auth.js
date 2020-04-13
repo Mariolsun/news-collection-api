@@ -6,7 +6,9 @@ const { JWT_SECRET } = require('../config');
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
   let token;
-  if (authorization && authorization.startsWith('Bearer ')) {
+  if (req.cookies.jwt) {
+    token = req.cookies.jwt;
+  } else if (authorization && authorization.startsWith('Bearer ')) {
     token = authorization.replace('Bearer ', '');
   }
 
