@@ -1,15 +1,23 @@
 require('dotenv').config();
 
-const isProduction = process.env.NODE_ENV === 'production';
+const {
+  NODE_ENV, PORT, JWT_SECRET, DATABASE_PATH,
+} = process.env;
 
-const PORT = process.env.PORT || 3000;
-const JWT_SECRET = isProduction ? process.env.JWT_SECRET : 'dev-secret';
+const isProduction = NODE_ENV === 'production';
+
+const DEV_SECRET = 'dev-secret';
+const DEV_PORT = 3000;
+const DEV_DATABASE_PATH = 'mongodb://localhost:27017/newscollectiondb';
+
+const SERVER_PORT = isProduction && PORT ? PORT : DEV_PORT;
+const SECRET_STRING = isProduction && JWT_SECRET ? JWT_SECRET : DEV_SECRET;
+const DB_PATH = isProduction && DATABASE_PATH ? DATABASE_PATH : DEV_DATABASE_PATH;
+
 const ALLOWED_CORS = [
   'http://newscollection.gq',
   'https://newscollection.gq',
 ];
-const BASE_PATH = isProduction ? process.env.BASE_PATH : 'localhost';
-const DATABASE_PATH = isProduction ? process.env.DATABASE_PATH : 'mongodb://localhost:27017/newscollectiondb';
 const DATABASE_SETTINGS = {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -21,11 +29,10 @@ const REQUEST_LOG_FILE = 'request.log';
 const ERROR_LOG_FILE = 'error.log';
 
 module.exports = {
-  PORT,
-  JWT_SECRET,
+  SERVER_PORT,
+  SECRET_STRING,
   ALLOWED_CORS,
-  BASE_PATH,
-  DATABASE_PATH,
+  DB_PATH,
   DATABASE_SETTINGS,
   REQUEST_LOG_FILE,
   ERROR_LOG_FILE,

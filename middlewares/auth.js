@@ -1,7 +1,7 @@
 
 const jwt = require('jsonwebtoken');
 const NeedAuthError = require('../errors/need-auth-err');
-const { JWT_SECRET } = require('../config');
+const { SECRET_STRING } = require('../config');
 const errorTexts = require('../constants/errors');
 
 module.exports = (req, res, next) => {
@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
 
   let payload;
   try {
-    payload = jwt.verify(token, JWT_SECRET);
+    payload = jwt.verify(token, SECRET_STRING);
   } catch (err) {
     next(new NeedAuthError(errorTexts.AUTH_NEEDED));
   }

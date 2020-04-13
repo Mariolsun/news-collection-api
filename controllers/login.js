@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const { JWT_SECRET } = require('../config');
+const { SECRET_STRING } = require('../config');
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
@@ -12,7 +12,7 @@ module.exports.login = (req, res, next) => {
           email: user.email,
           name: user.name,
         },
-        JWT_SECRET,
+        SECRET_STRING,
         { expiresIn: '7d' },
       );
       res.cookie('jwt', token, {

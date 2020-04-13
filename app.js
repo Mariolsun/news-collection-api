@@ -4,14 +4,14 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
-const { PORT, DATABASE_PATH, DATABASE_SETTINGS } = require('./config');
+const { SERVER_PORT, DB_PATH, DATABASE_SETTINGS } = require('./config');
 const limiter = require('./middlewares/limiter');
 const routes = require('./routes/index');
 const corsHeaders = require('./middlewares/corsHeaders');
 const { requestLogger, errorLogger, logError } = require('./middlewares/logger');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 
-mongoose.connect(DATABASE_PATH, DATABASE_SETTINGS)
+mongoose.connect(DB_PATH, DATABASE_SETTINGS)
   .then(() => {
     const app = express();
     app.set('trust proxy', 1); // указана в доках к express-rate-limit, нужна при использовании reverse proxy (nginx). ip клиента => req.ip
@@ -31,7 +31,7 @@ mongoose.connect(DATABASE_PATH, DATABASE_SETTINGS)
     app.use(errorMiddleware);
 
 
-    app.listen(PORT);
+    app.listen(SERVER_PORT);
   })
   .catch((err) => {
     logError(`could not connect to MongoDB. Err: ${err}`);
