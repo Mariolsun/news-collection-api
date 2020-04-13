@@ -6,10 +6,9 @@ module.exports = (err, req, res, next) => {
   if (res.headersSent) {
     return next(err);
   }
-  res
+  return res
     .status(statusCode)
     .send({
       message,
     });
-  return true;
 };
