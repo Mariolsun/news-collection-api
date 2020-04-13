@@ -4,14 +4,14 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
-const { PORT, DATABASE_URL, DATABASE_SETTINGS } = require('./config');
+const { PORT, DATABASE_PATH, DATABASE_SETTINGS } = require('./config');
 const limiter = require('./middlewares/limiter');
 const routes = require('./routes/index');
 const corsHeaders = require('./middlewares/corsHeaders');
 const { requestLogger, errorLogger, logError } = require('./middlewares/logger');
 const errorController = require('./controllers/errorController');
 
-mongoose.connect(DATABASE_URL, DATABASE_SETTINGS)
+mongoose.connect(DATABASE_PATH, DATABASE_SETTINGS)
   .then(() => {
     const app = express();
     app.set('trust proxy', 1); // указана в доках к express-rate-limit, ip клиента => req.ip

@@ -1,13 +1,15 @@
 require('dotenv').config();
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 module.exports.PORT = process.env.PORT || 3000;
-module.exports.JWT_SECRET = process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : 'dev-secret';
+module.exports.JWT_SECRET = isProduction ? process.env.JWT_SECRET : 'dev-secret';
 module.exports.ALLOWED_CORS = [
   'http://newscollection.gq',
   'https://newscollection.gq',
 ];
-module.exports.BASE_PATH = process.env.BASE_PATH || 'localhost';
-module.exports.DATABASE_URL = process.env.DATABASE_URL || 'mongodb://localhost:27017/newscollectiondb';
+module.exports.BASE_PATH = isProduction ? process.env.BASE_PATH : 'localhost';
+module.exports.DATABASE_PATH = isProduction ? process.env.DATABASE_PATH : 'mongodb://localhost:27017/newscollectiondb';
 module.exports.DATABASE_SETTINGS = {
   useNewUrlParser: true,
   useCreateIndex: true,

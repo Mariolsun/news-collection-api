@@ -15,6 +15,7 @@ const errorLogger = expressWinston.errorLogger({
     new winston.transports.File({ filename: ERROR_LOG_FILE }),
   ],
   format: winston.format.json(),
+  bodyBlacklist: 'password',
 });
 
 const customErrorLogger = winston.createLogger({
