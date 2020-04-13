@@ -1,11 +1,8 @@
-const allowedCors = [ // перенести в конфиг
-  'http://newscollection.gq',
-  'https://newscollection.gq',
-];
+const { ALLOWED_CORS } = require('../config');
 
 module.exports = (req, res, next) => {
   const { origin } = req.headers;
-  if (allowedCors.includes(origin)) {
+  if (ALLOWED_CORS.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
   }
   res.header('Access-Control-Allow-Credentials', 'true');

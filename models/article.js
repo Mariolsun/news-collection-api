@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const { MESSAGES } = require('../config');
 
 const articleSchema = new mongoose.Schema({
   keyword: {
@@ -26,7 +27,7 @@ const articleSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: validator.isURL,
-      message: (props) => `${props.value} is not a valid link!`,
+      message: (props) => `${props.value} ${MESSAGES.VALID_NOT_LINK}`,
     },
     required: true,
   },
@@ -34,7 +35,7 @@ const articleSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: validator.isURL,
-      message: (props) => `${props.value} is not a valid link!`,
+      message: (props) => `${props.value} ${MESSAGES.VALID_NOT_LINK}`,
     },
     required: true,
   },

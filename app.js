@@ -15,6 +15,7 @@ mongoose.connect(DATABASE_URL, DATABASE_SETTINGS)
   .then(() => {
     const app = express();
     app.set('trust proxy', 1); // указана в доках к express-rate-limit, ip клиента => req.ip
+
     app.use(limiter);
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));

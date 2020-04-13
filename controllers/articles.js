@@ -1,5 +1,6 @@
 const Article = require('../models/article');
 const NotFoundError = require('../errors/not-found-err');
+const { MESSAGES } = require('../config');
 
 module.exports.getArticles = (req, res, next) => {
   Article.find({})
@@ -38,9 +39,9 @@ module.exports.deleteArticle = (req, res, next) => {
   Article.findByIdAndDelete(req.params.id)
     .then((deletedCard) => {
       if (!deletedCard) {
-        throw new NotFoundError('Такой карточки нет в базе');
+        throw new NotFoundError(MESSAGES.ARTICLE_NOT_FOUND);
       }
-      res.send({ message: 'Карточка удалена', data: deletedCard });
+      res.send({ message: MESSAGES.ARTICLE_DELETED, data: deletedCard });
     })
     .catch(next);
 };

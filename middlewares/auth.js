@@ -1,7 +1,7 @@
 
 const jwt = require('jsonwebtoken');
 const NeedAuthError = require('../errors/need-auth-err');
-const { JWT_SECRET } = require('../config');
+const { JWT_SECRET, MESSAGES } = require('../config');
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
@@ -16,7 +16,7 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
-    next(new NeedAuthError('Необходима авторизация'));
+    next(new NeedAuthError(MESSAGES.AUTH_NEEDED));
   }
 
   req.user = payload;
