@@ -1,4 +1,4 @@
-const bcrypt = require('bcryptjs');
+// const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
 const ConflictError = require('../errors/conflict-err');
@@ -21,13 +21,9 @@ module.exports.createUser = (req, res, next) => {
       if (exists) throw new ConflictError(errorTexts.USER_ALREADY_EXISTS);
     })
     .then(() => {
-      const { password } = req.body;
-      return bcrypt.hash(password, 10);
-    })
-    .then((hash) => {
-      const { name } = req.body;
+      const { name, password } = req.body;
       return User.create({
-        email, password: hash, name,
+        email, password, name, // пароль хэшируется в pre save хуке в models/user.js
       });
     })
     .then((user) => {

@@ -29,6 +29,18 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+
+userSchema.pre('save', async function hashPassword(next) { // стрелочная функция тут не работает (this.isNew === undefined)
+  if (this.isNew) {
+    await bcrypt.hash(this.password, 10)
+      .then((hash) => {
+        this.password = hash;
+      })
+      .catch(next);
+  }
+  next();
+});
+
 userSchema.statics.findUserByCredentials = function findUserByCredentials(email, password) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
