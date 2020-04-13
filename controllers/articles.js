@@ -1,5 +1,4 @@
 const Article = require('../models/article');
-const { MESSAGES } = require('../config');
 
 module.exports.getArticles = (req, res, next) => {
   Article.find({ owner: req.user._id })
@@ -37,7 +36,7 @@ module.exports.createArticle = (req, res, next) => {
 module.exports.deleteArticle = (req, res, next) => {
   Article.findByIdAndDelete(req.params.id).select('-owner')
     .then((deletedCard) => {
-      res.send({ message: MESSAGES.ARTICLE_DELETED, data: deletedCard });
+      res.send({ data: deletedCard });
     })
     .catch(next);
 };

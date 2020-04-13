@@ -1,12 +1,12 @@
 const Article = require('../models/article');
 const NotFoundError = require('../errors/not-found-err');
-const { MESSAGES } = require('../config');
+const { ERRORS } = require('../constants/errors');
 
 module.exports.doesArticleExists = (req, res, next) => {
   Article.exists({ _id: req.params.id })
     .then((exists) => {
       if (!exists) {
-        throw new NotFoundError(MESSAGES.ARTICLE_NOT_FOUND);
+        throw new NotFoundError(ERRORS.ARTICLE_NOT_FOUND);
       }
       next();
     })
