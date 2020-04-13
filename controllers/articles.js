@@ -27,7 +27,7 @@ module.exports.createArticle = (req, res, next) => {
     link,
     image,
     owner: req.user._id,
-  })
+  }).then((article) => Article.findById(article._id).select('-owner')) // Заново находим созданную карточку, чтобы исключить поле owner
     .then((article) => {
       res.send({ data: article });
     })
