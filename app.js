@@ -9,7 +9,7 @@ const limiter = require('./middlewares/limiter');
 const routes = require('./routes/index');
 const corsHeaders = require('./middlewares/corsHeaders');
 const { requestLogger, errorLogger, logError } = require('./middlewares/logger');
-const errorController = require('./controllers/errorController');
+const errorMiddleware = require('./middlewares/errorMiddleware');
 
 mongoose.connect(DATABASE_PATH, DATABASE_SETTINGS)
   .then(() => {
@@ -28,7 +28,7 @@ mongoose.connect(DATABASE_PATH, DATABASE_SETTINGS)
     app.use(errors());
     app.use(errorLogger);
 
-    app.use(errorController);
+    app.use(errorMiddleware);
 
 
     app.listen(PORT);
