@@ -26,7 +26,7 @@ module.exports.createArticle = (req, res, next) => {
     link,
     image,
     owner: req.user._id,
-  }).then((article) => Article.findById(article._id).select('-owner')) // выкидывание поля owner
+  }).then((article) => Article.findById(article._id).select('-owner')) // выбрасывание поля owner
     .then((article) => { // при помощи {owner, ...restParams} работает очень странно.
       res.send({ data: article }); // сами данные карточки хранятся в restParams._doc с полем owner!
     }) // похоже на работу mongoose и лечится копированием article (JSON.parse(JSON.stringify))
