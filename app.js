@@ -1,49 +1,38 @@
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const helmet = require('helmet');
-
-// const cookieParser = require('cookie-parser');
-
 const bodyParser = require('body-parser');
+const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
+const { errors } = require('celebrate');
+const { SERVER_PORT, DB_PATH, DATABASE_SETTINGS } = require('./config');
+const limiter = require('./middlewares/limiter');
+const routes = require('./routes/index');
+const corsHeaders = require('./middlewares/corsHeaders');
+const { requestLogger, errorLogger, logError } = require('./middlewares/logger');
+const errorMiddleware = require('./middlewares/errorMiddleware');
 
-const quotes = require('./routes/quotes');
-const personas = require('./routes/personas');
-const { createQuote } = require('./controllers/CreateQuote');
-const { createPersona } = require('./controllers/CreatePersona');
-
-const { PORT = 3000, BASE_PATH } = process.env;
-const app = express();
-mongoose.connect('mongodb://localhost:27017/quotesdb', {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true,
-})
+mongoose.connect(DB_PATH, DATABASE_SETTINGS)
   .then(() => {
-    console.log('successful connection!');
+    const app = express();
+    app.set('trust proxy', 1); // указана в доках к express-rate-limit, нужна при использовании reverse proxy (nginx). ip клиента => req.ip
+
+    app.use(limiter);
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(helmet());
+    app.use(cookieParser());
+    app.use(corsHeaders);
+    app.use(requestLogger);
+    app.use('/', routes);
+
+    app.use(errors());
+    app.use(errorLogger);
+
+    app.use(errorMiddleware);
+
+
+    app.listen(SERVER_PORT);
   })
   .catch((err) => {
-    console.log(`error connecting to mongodb: ${err.message}`);
+    logError(`could not connect to MongoDB. Err: ${err}`);
   });
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// app.use(cookieParser());
-
-app.use(helmet());
-
-
-app.use('/', quotes);
-app.use('/personas', personas);
-app.post('/', createQuote);
-app.post('/personas', createPersona);
-app.use((req, res) => {
-  res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
-});
-
-app.listen(PORT, () => {
-  console.log('Ссылка на сервер:');
-  console.log(BASE_PATH);
-});
