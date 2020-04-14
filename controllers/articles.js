@@ -28,7 +28,7 @@ module.exports.createArticle = (req, res, next) => {
     owner: req.user._id,
   })
     .then((article) => {
-      const { owner, ...articleFields } = article;
+      const { owner, ...articleFields } = JSON.parse(JSON.stringify(article));
       res.send({ data: articleFields });
     })
     .catch(next);
