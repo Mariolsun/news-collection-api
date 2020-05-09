@@ -20,7 +20,7 @@ module.exports.login = (req, res, next) => {
         httpOnly: true,
         sameSite: true,
       });
-      res.send({ data: { jwt: `Bearer ${token}` } });
+      res.send({ data: { jwt: `Bearer ${token}`, name: user.name } });
     })
     .catch(next);
 };
