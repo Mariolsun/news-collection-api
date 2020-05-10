@@ -9,7 +9,7 @@ module.exports.getUser = (req, res, next) => {
     .then((user) => {
       const { email, name } = user;
       if (!user) throw new NotFoundError(errorTexts.USER_NOT_FOUND);
-      res.send({ data: { email, name } });
+      res.header('Cache-Control', 'no-cache').send({ data: { email, name } });
     })
     .catch(next);
 };
