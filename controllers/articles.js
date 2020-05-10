@@ -14,7 +14,7 @@ module.exports.createArticle = (req, res, next) => {
     publishedAt,
     source,
     url,
-    image,
+    urlToImage,
   } = req.body;
 
   Article.create({
@@ -24,7 +24,7 @@ module.exports.createArticle = (req, res, next) => {
     publishedAt,
     source,
     url,
-    image,
+    urlToImage,
     owner: req.user._id,
   }).then((article) => Article.findById(article._id).select('-owner')) // выбрасывание поля owner
     .then((article) => { // при помощи {owner, ...restParams} работает очень странно.
