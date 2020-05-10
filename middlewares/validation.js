@@ -12,11 +12,11 @@ module.exports.isValidArticleSchema = celebrate({
   body: Joi.object().keys({
     keyword: Joi.string().required(),
     title: Joi.string().required(),
-    text: Joi.string().required(),
-    date: Joi.string().required(),
+    description: Joi.string().required(),
+    publishedAt: Joi.string().required(),
     source: Joi.string().required(),
-    link: Joi.string().required().uri(),
-    image: Joi.string().required().uri(),
+    url: Joi.string().required().uri(),
+    urlToImage: Joi.string().required().uri(),
   }),
 });
 
