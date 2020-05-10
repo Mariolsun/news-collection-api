@@ -10,20 +10,20 @@ module.exports.createArticle = (req, res, next) => {
   const {
     keyword,
     title,
-    text,
-    date,
+    description,
+    publishedAt,
     source,
-    link,
+    url,
     image,
   } = req.body;
 
   Article.create({
     keyword,
     title,
-    text,
-    date,
+    description,
+    publishedAt,
     source,
-    link,
+    url,
     image,
     owner: req.user._id,
   }).then((article) => Article.findById(article._id).select('-owner')) // выбрасывание поля owner
